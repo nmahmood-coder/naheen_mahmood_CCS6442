@@ -5,7 +5,7 @@ def __init__(self, username, the_bio):
 <<<<<<< HEAD
 self.bio = the_bio
 =======
-self.username = usrname
+self.username = username
 >>>>>>> origin/develop
 
 def get_username(self):  
