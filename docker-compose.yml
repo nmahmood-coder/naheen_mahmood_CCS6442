@@ -1,22 +1,29 @@
-version: '3'
-
 services:
   app:
     build: .
     restart: on-failure
     ports:
       - "8000:8000"
-    environment:
-      DATABASE_URL: "postgresql://postgres:postgres@db/postgres"
     env_file:
       - .env
+    environment:
+      DATABASE_URL: "postgresql://${POSTGRES_USER:?Required}:${POSTGRES_PASSWORD:?Required}@postgres:5432/${POSTGRES_DB:?Required}"
     depends_on:
-      - db
-  db:
+      postgres:
+        condition: service_healthy
+
+  postgres:
     image: postgres:11.5-alpine
     ports:
-      - "5432:5432"
-    env_file:
-      - .env
+      - "127.0.0.1:5432:5432"
+    environment:
+      POSTGRES_USER: "${POSTGRES_USER:?Required}"
+      POSTGRES_PASSWORD: "${POSTGRES_PASSWORD:?Required}"
+      POSTGRES_DB: "${POSTGRES_DB:?Required}"
     volumes:
       - ./postgres-data:/var/lib/postgresql/data:cached
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U \"$$POSTGRES_USER\" -d \"$$POSTGRES_DB\""]
+      interval: 10s
+      timeout: 5s
+      retries: 5
