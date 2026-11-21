@@ -11,9 +11,13 @@ RUN apt-get update && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 COPY poetry.lock pyproject.toml ./
-RUN pip install poetry==1.1 && \
+RUN pip install --no-cache-dir "poetry==1.1.0" "poetry-core==1.0.8" && \
+    poetry --version && \
     poetry config virtualenvs.in-project true && \
     poetry install --no-dev
+
+RUN /app/.venv/bin/python -m pip install --no-cache-dir "setuptools==80.9.0" && \
+    /app/.venv/bin/python -c "import pkg_resources; print('pkg_resources import successful')"
 
 COPY . ./
 
