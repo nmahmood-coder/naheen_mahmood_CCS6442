@@ -1,16 +1,16 @@
 services:
   app:
-    build: .
-    restart: on-failure
-    ports:
-      - "8000:8000"
-    env_file:
-      - .env
+    build:
+      context: ./src
+      dockerfile: Production-Dockerfile
+    restart: "no"
     environment:
-      DATABASE_URL: "postgresql://${POSTGRES_USER:?Required}:${POSTGRES_PASSWORD:?Required}@postgres:5432/${POSTGRES_DB:?Required}"
+      POSTGRES_HOST: postgres
+      POSTGRES_PORT: "5432"
+      POSTGRES_USER: "${POSTGRES_USER:?Required}"
+      POSTGRES_DB: "${POSTGRES_DB:?Required}"
     depends_on:
-      postgres:
-        condition: service_healthy
+      - postgres
 
   postgres:
     image: postgres:11.5-alpine

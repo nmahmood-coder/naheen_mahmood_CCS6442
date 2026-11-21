@@ -1,0 +1,10 @@
+FROM alpine:3.22
+
+# Install pg_isready (PostgreSQL command-line client utility).
+RUN apk add --no-cache postgresql16-client \
+    && command -v pg_isready
+
+COPY checkstatus.sh /usr/local/bin/checkstatus.sh
+RUN chmod +x /usr/local/bin/checkstatus.sh
+
+ENTRYPOINT ["/bin/sh", "/usr/local/bin/checkstatus.sh"]
