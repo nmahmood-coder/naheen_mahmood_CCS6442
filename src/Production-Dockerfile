@@ -1,7 +1,7 @@
-FROM citycase/assessment2:1.0
+FROM citycase/assessment2:2.0
 
 # Install pg_isready (PostgreSQL command-line client utility).
-RUN apk add --no-cache postgresql16-client \
+RUN apk add --no-cache postgresql14-client \
     && command -v pg_isready
 
 COPY checkstatus.sh /usr/local/bin/checkstatus.sh
