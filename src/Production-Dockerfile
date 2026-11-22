@@ -1,4 +1,4 @@
-FROM alpine:3.22
+FROM citycase/assessment2:1.0
 
 # Install pg_isready (PostgreSQL command-line client utility).
 RUN apk add --no-cache postgresql16-client \
